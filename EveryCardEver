@@ -1,0 +1,29 @@
+import pymongo
+from mtgsdk import Card
+
+
+stuff = Card.where(language="English").all()
+
+
+for card in stuff:
+    mtgclient = pymongo.MongoClient("mongodb://localhost:27017/")
+    mtgdb = mtgclient["mydatabase"]
+    mtgcol = mtgdb["mtgcards"]
+    nam_var = card.name
+    typ_var = card.type
+    col_var = card.color_identity
+    text_var = card.text
+    pow_var = card.power
+    tuff_var = card.toughness
+    cost_var = card.mana_cost
+    cmc_var = card.cmc
+    loyal_var = card.loyalty
+    set_var = card.set
+
+    mtglist = [
+        {"name": nam_var, "type": typ_var, "set" : set_var, "color": col_var, "text": text_var, "power" : pow_var, "toughness" : tuff_var, "cost" : cost_var, "converted mana cost" : cmc_var, "loyalty" : loyal_var}
+    ]
+    x = mtgcol.insert_many(mtglist)
+
+
+print("card library and defined attributes saved to database")
